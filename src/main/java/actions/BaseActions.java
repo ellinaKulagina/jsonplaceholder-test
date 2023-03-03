@@ -9,9 +9,9 @@ import utils.MyAllureRestAssured;
 @NoArgsConstructor
 public class BaseActions {
 
-    public static RequestSpecification initSpec(ContentType contentType) {
+    public static RequestSpecification initSpec() {
         return new RequestSpecBuilder()
-                .setContentType(contentType)
+                .setContentType(ContentType.JSON)
                 .addFilter(new MyAllureRestAssured())
                 .build();
     }

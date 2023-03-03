@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import models.PostModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -17,11 +15,12 @@ public class Context {
     private PostModel actualPost;
     private List<PostModel> posts;
     private int responseCode;
+    private int userId;
+    private String partialUpdate;
 
     public Context() {
         this.post = new PostModel();
         this.actualPost = new PostModel();
         this.posts = new ArrayList<>();
-        this.responseCode = getResponseCode();
     }
 }

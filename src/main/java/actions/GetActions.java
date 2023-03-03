@@ -1,6 +1,5 @@
 package actions;
 
-import io.restassured.http.ContentType;
 import models.PostModel;
 import utils.ApplicationConfiguration;
 import utils.ApplicationConfigurationLoader;
@@ -11,12 +10,11 @@ import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
-public class PostActions extends BaseActions {
-
+public class GetActions extends BaseActions {
     protected static ApplicationConfiguration appConfig = ApplicationConfigurationLoader.getConfig();
 
-    public PostModel sendPostRequest (int id) {
-        return given(initSpec(ContentType.JSON))
+    public PostModel sendPostRequest(int id) {
+        return given(initSpec())
                 .when()
                 .get(appConfig.postsUrl() + String.format("/%s", id))
                 .then()
@@ -25,32 +23,22 @@ public class PostActions extends BaseActions {
                 .extract().as(PostModel.class);
     }
 
-    public List<PostModel> sendPostsRequest () {
-        return Arrays.stream(given(initSpec(ContentType.JSON))
+    public List<PostModel> sendPostsRequest(String urlPath) {
+        return Arrays.stream(given(initSpec())
                 .when()
-                .get(appConfig.postsUrl())
+                .get(appConfig.postsUrl() + urlPath)
                 .then()
                 .log().ifError()
                 .statusCode(200)
                 .extract().as(PostModel[].class)).collect(Collectors.toList());
     }
 
-    public Integer sendUnsuccessfulPostRequest (String id) {
-        return given(initSpec(ContentType.JSON))
+    public Integer sendUnsuccessfulPostRequest(String id) {
+        return given(initSpec())
                 .when()
                 .get(appConfig.postsUrl() + id)
                 .then()
                 .extract().statusCode();
     }
 
-    public PostModel createNewPost(PostModel post) {
-        return given(initSpec(ContentType.JSON))
-                .body(post)
-                .when()
-                .post(appConfig.postsUrl())
-                .then()
-                .log().ifError()
-                .statusCode(201)
-                .extract().as(PostModel.class);
-    }
 }
