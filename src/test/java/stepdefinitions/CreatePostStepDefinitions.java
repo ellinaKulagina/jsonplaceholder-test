@@ -18,33 +18,37 @@ public class CreatePostStepDefinitions {
 
     @When("User creates a new post")
     public void user_creates_new_post(DataTable table) {
-        PostModel newPost = PostModel.builder()
+        PostModel newPostModel = PostModel.builder()
                 .body(table.asList().get(3))
                 .title(table.asList().get(4))
                 .userId(Integer.parseInt(table.asList().get(5)))
                 .build();
 
-        context.setPost(createActions.createNewPost(newPost));
-        context.setActualPost(newPost);
+        PostModel newPost = createActions.createNewPost(newPostModel);
+        context.setPost(newPost);
+        context.setActualPost(newPostModel);
     }
 
     @When("User tries to create an invalid new post")
     public void user_creates_invalid_post(DataTable table) {
-        PostModel newPost = PostModel.builder()
+        PostModel newInvalidPostModel = PostModel.builder()
                 .body(table.asList().get(3))
                 .title(table.asList().get(4))
                 .userId(Integer.parseInt(table.asList().get(5)))
                 .build();
 
-        context.setResponseCode(createActions.createInvalidNewPost(newPost));
+        int responseCode = createActions.createInvalidNewPost(newInvalidPostModel);
+        context.setResponseCode(responseCode);
     }
 
     @Then("User can see a new post with the correct details")
     public void user_can_see_new_post() {
+        PostModel actualPost = context.getActualPost();
+        PostModel expectedPost = context.getPost();
+
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(context.getActualPost()).usingRecursiveComparison()
-                .ignoringFields("id").isEqualTo(context.getPost());
-        softly.assertThat(context.getPost().getId()).isPositive();
+        softly.assertThat(actualPost).usingRecursiveComparison().ignoringFields("id").isEqualTo(expectedPost);
+        softly.assertThat(expectedPost.getId()).isPositive();
         softly.assertAll();
     }
 }

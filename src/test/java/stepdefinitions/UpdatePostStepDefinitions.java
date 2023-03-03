@@ -23,15 +23,17 @@ public class UpdatePostStepDefinitions {
 
     @When("User sends updates to the post")
     public void user_updates_post(DataTable table) {
-        PostModel updatedPost = PostModel.builder()
+        PostModel updatedPostModel = PostModel.builder()
                 .body(table.asList().get(4))
                 .title(table.asList().get(5))
                 .userId(Integer.parseInt(table.asList().get(6)))
                 .id(Integer.parseInt(table.asList().get(7)))
                 .build();
 
-        context.setPost(updateActions.updatePost(updatedPost));
-        context.setActualPost(updatedPost);
+        PostModel updatedPost = updateActions.updatePost(updatedPostModel);
+
+        context.setPost(updatedPost);
+        context.setActualPost(updatedPostModel);
     }
 
     @When("User sends partial update to the post for {string}")
@@ -45,8 +47,11 @@ public class UpdatePostStepDefinitions {
         }
         ;
 
+        int actualPostId = context.getActualPost().getId();
+        PostModel partiallyUpdatedPost = updateActions.partiallyUpdatePost(requestParams, actualPostId);
+
         context.setPartialUpdate(field);
-        context.setPost(updateActions.partiallyUpdatePost(requestParams, context.getActualPost().getId()));
+        context.setPost(partiallyUpdatedPost);
     }
 
     @Then("User gets an updated post with the correct details")
