@@ -1,3 +1,4 @@
+@post
 Feature: Test GET method for getting one or multiple posts
 
   @severity=blocker

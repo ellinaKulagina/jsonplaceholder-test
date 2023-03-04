@@ -6,6 +6,7 @@ Tests cover all main functionalities from the [guide page](https://jsonplacehold
 
 
 ## :rocket: Technologies ##
+- Java 14 - to support lambda functions
 - [Cucumber](https://cucumber.io/) - to support BDD
 - [RestAssured](https://rest-assured.io/) - to work with API requests&responses
 - [Allure](https://qameta.io/allure-report/) - to generate a html report
@@ -15,6 +16,7 @@ Tests cover all main functionalities from the [guide page](https://jsonplacehold
 
 ## :arrow_forward: Running tests ##
 ```mvn clean test``` command will run all tests together
+```mvn clean test -Dcucumber.filter.tag="@comment"``` command will run tests with selected tags
 
 ## :eyeglasses: Generating report ##
 1. Manually create allure-results folder in your target folder

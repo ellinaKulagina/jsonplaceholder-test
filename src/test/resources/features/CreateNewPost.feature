@@ -1,3 +1,4 @@
+@post
 Feature: Test POST method for creating new posts
 
   @severity=blocker

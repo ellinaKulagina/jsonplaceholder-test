@@ -1,3 +1,4 @@
+@comment
 Feature: Test GET method for getting one or multiple comments
 
   @severity=blocker

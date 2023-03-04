@@ -1,3 +1,4 @@
+@post
 Feature: Test methods for updating posts
 
   @severity=blocker
