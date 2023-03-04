@@ -1,12 +1,13 @@
-package actions;
+package actions.post;
 
+import actions.BaseActions;
 import models.PostModel;
 import utils.ApplicationConfiguration;
 import utils.ApplicationConfigurationLoader;
 
 import static io.restassured.RestAssured.given;
 
-public class CreateActions extends BaseActions {
+public class CreatePostActions extends BaseActions {
     protected static ApplicationConfiguration appConfig = ApplicationConfigurationLoader.getConfig();
 
     public PostModel createNewPost(PostModel post) {

@@ -1,5 +1,6 @@
-package actions;
+package actions.post;
 
+import actions.BaseActions;
 import models.PostModel;
 import utils.ApplicationConfiguration;
 import utils.ApplicationConfigurationLoader;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
-public class GetActions extends BaseActions {
+public class GetPostActions extends BaseActions {
     protected static ApplicationConfiguration appConfig = ApplicationConfigurationLoader.getConfig();
 
     public PostModel sendPostRequest(int id) {
@@ -32,13 +33,4 @@ public class GetActions extends BaseActions {
                 .statusCode(200)
                 .extract().as(PostModel[].class)).collect(Collectors.toList());
     }
-
-    public Integer sendUnsuccessfulPostRequest(String id) {
-        return given(initSpec())
-                .when()
-                .get(appConfig.postsUrl() + id)
-                .then()
-                .extract().statusCode();
-    }
-
 }

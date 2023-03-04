@@ -1,5 +1,6 @@
-package actions;
+package actions.post;
 
+import actions.BaseActions;
 import io.cucumber.messages.internal.com.google.gson.JsonObject;
 import io.restassured.RestAssured;
 import models.PostModel;
@@ -8,14 +9,14 @@ import utils.ApplicationConfigurationLoader;
 
 import static io.restassured.RestAssured.given;
 
-public class UpdateActions extends BaseActions {
+public class UpdatePostActions extends BaseActions {
     protected static ApplicationConfiguration appConfig = ApplicationConfigurationLoader.getConfig();
 
     public PostModel updatePost(PostModel post) {
         return RestAssured.given(initSpec())
                 .body(post)
                 .when()
-                .put(GetActions.appConfig.postsUrl() + String.format("/%s", post.getId()))
+                .put(GetPostActions.appConfig.postsUrl() + String.format("/%s", post.getId()))
                 .then()
                 .log().ifError()
                 .statusCode(200)

@@ -1,6 +1,6 @@
 package stepdefinitions;
 
-import actions.CreateActions;
+import actions.post.CreatePostActions;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -10,7 +10,7 @@ import utils.Context;
 
 public class CreatePostStepDefinitions {
     private Context context;
-    private CreateActions createActions = new CreateActions();
+    private CreatePostActions createPostActions = new CreatePostActions();
 
     public CreatePostStepDefinitions(Context context) {
         this.context = context;
@@ -24,7 +24,7 @@ public class CreatePostStepDefinitions {
                 .userId(Integer.parseInt(table.asList().get(5)))
                 .build();
 
-        PostModel newPost = createActions.createNewPost(newPostModel);
+        PostModel newPost = createPostActions.createNewPost(newPostModel);
         context.setPost(newPost);
         context.setActualPost(newPostModel);
     }
@@ -37,7 +37,7 @@ public class CreatePostStepDefinitions {
                 .userId(Integer.parseInt(table.asList().get(5)))
                 .build();
 
-        int responseCode = createActions.createInvalidNewPost(newInvalidPostModel);
+        int responseCode = createPostActions.createInvalidNewPost(newInvalidPostModel);
         context.setResponseCode(responseCode);
     }
 

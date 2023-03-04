@@ -6,6 +6,8 @@ import io.restassured.specification.RequestSpecification;
 import lombok.NoArgsConstructor;
 import utils.MyAllureRestAssured;
 
+import static io.restassured.RestAssured.given;
+
 @NoArgsConstructor
 public class BaseActions {
 
@@ -14,5 +16,13 @@ public class BaseActions {
                 .setContentType(ContentType.JSON)
                 .addFilter(new MyAllureRestAssured())
                 .build();
+    }
+
+    public Integer sendUnsuccessfulRequest(String url, String id) {
+        return given(initSpec())
+                .when()
+                .get(url + id)
+                .then()
+                .extract().statusCode();
     }
 }

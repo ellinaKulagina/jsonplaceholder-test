@@ -1,6 +1,6 @@
 package stepdefinitions;
 
-import actions.GetActions;
+import actions.post.GetPostActions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SharedStepDefinitions {
 
     private Context context;
-    private GetActions getActions = new GetActions();
+    private GetPostActions getPostActions = new GetPostActions();
 
     public SharedStepDefinitions(Context context) {
         this.context = context;
@@ -21,7 +21,7 @@ public class SharedStepDefinitions {
     @When("User requests to see a post with id {int}")
     @Given("User has an existing post {int}")
     public void user_requests_to_see_a_post_with_id(Integer id) {
-        PostModel actualPost = getActions.sendPostRequest(id);
+        PostModel actualPost = getPostActions.sendPostRequest(id);
         context.setActualPost(actualPost);
     }
 

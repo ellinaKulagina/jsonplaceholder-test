@@ -1,6 +1,6 @@
 package stepdefinitions;
 
-import actions.UpdateActions;
+import actions.post.UpdatePostActions;
 import helpers.StringHelper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UpdatePostStepDefinitions {
 
     private Context context;
-    private UpdateActions updateActions = new UpdateActions();
+    private UpdatePostActions updatePostActions = new UpdatePostActions();
 
     public UpdatePostStepDefinitions(Context context) {
         this.context = context;
@@ -30,7 +30,7 @@ public class UpdatePostStepDefinitions {
                 .id(Integer.parseInt(table.asList().get(7)))
                 .build();
 
-        PostModel updatedPost = updateActions.updatePost(updatedPostModel);
+        PostModel updatedPost = updatePostActions.updatePost(updatedPostModel);
 
         context.setPost(updatedPost);
         context.setActualPost(updatedPostModel);
@@ -48,7 +48,7 @@ public class UpdatePostStepDefinitions {
         ;
 
         int actualPostId = context.getActualPost().getId();
-        PostModel partiallyUpdatedPost = updateActions.partiallyUpdatePost(requestParams, actualPostId);
+        PostModel partiallyUpdatedPost = updatePostActions.partiallyUpdatePost(requestParams, actualPostId);
 
         context.setPartialUpdate(field);
         context.setPost(partiallyUpdatedPost);
@@ -62,8 +62,11 @@ public class UpdatePostStepDefinitions {
     @Then("User gets a partially updated post with the correct details")
     public void user_gets_partially_updated_post() {
         String updatedField = context.getPartialUpdate();
-        PostModel initialPost = StringHelper.removeNewLinesFromBody(context.getActualPost());
-        PostModel updatedPost = StringHelper.removeNewLinesFromBody(context.getPost());
+        PostModel initialPost = context.getActualPost();
+        initialPost.setBody(StringHelper.removeNewLinesFromBody(initialPost.getBody()));
+
+        PostModel updatedPost = context.getPost();
+        updatedPost.setBody(StringHelper.removeNewLinesFromBody(updatedPost.getBody()));
 
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(updatedPost).usingRecursiveComparison().ignoringFields(updatedField).isEqualTo(initialPost);
