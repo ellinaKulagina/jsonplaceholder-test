@@ -1,12 +1,16 @@
 package stepdefinitions;
 
 import actions.post.CreatePostActions;
+import helpers.DataHelper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import models.PostModel;
 import org.assertj.core.api.SoftAssertions;
 import utils.Context;
+
+import java.util.List;
+import java.util.Map;
 
 public class CreatePostStepDefinitions {
     private Context context;
@@ -18,10 +22,12 @@ public class CreatePostStepDefinitions {
 
     @When("User creates a new post")
     public void user_creates_new_post(DataTable table) {
+        Map<String, String> postData = DataHelper.convertTableToMap(table);
+
         PostModel newPostModel = PostModel.builder()
-                .body(table.asList().get(3))
-                .title(table.asList().get(4))
-                .userId(Integer.parseInt(table.asList().get(5)))
+                .body(postData.get("body"))
+                .title(postData.get("title"))
+                .userId(Integer.parseInt(postData.get("userId")))
                 .build();
 
         PostModel newPost = createPostActions.createNewPost(newPostModel);
@@ -31,10 +37,12 @@ public class CreatePostStepDefinitions {
 
     @When("User tries to create an invalid new post")
     public void user_creates_invalid_post(DataTable table) {
+        Map<String, String> postData = DataHelper.convertTableToMap(table);
+
         PostModel newInvalidPostModel = PostModel.builder()
-                .body(table.asList().get(3))
-                .title(table.asList().get(4))
-                .userId(Integer.parseInt(table.asList().get(5)))
+                .body(postData.get("body"))
+                .title(postData.get("title"))
+                .userId(Integer.parseInt(postData.get("userId")))
                 .build();
 
         int responseCode = createPostActions.createInvalidNewPost(newInvalidPostModel);

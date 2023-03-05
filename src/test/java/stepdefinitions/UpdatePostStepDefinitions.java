@@ -1,6 +1,7 @@
 package stepdefinitions;
 
 import actions.post.UpdatePostActions;
+import helpers.DataHelper;
 import helpers.StringHelper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
@@ -9,6 +10,10 @@ import io.cucumber.messages.internal.com.google.gson.JsonObject;
 import models.PostModel;
 import org.assertj.core.api.SoftAssertions;
 import utils.Context;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,11 +28,13 @@ public class UpdatePostStepDefinitions {
 
     @When("User sends updates to the post")
     public void user_updates_post(DataTable table) {
+        Map<String, String> postUpdates = DataHelper.convertTableToMap(table);
+
         PostModel updatedPostModel = PostModel.builder()
-                .body(table.asList().get(4))
-                .title(table.asList().get(5))
-                .userId(Integer.parseInt(table.asList().get(6)))
-                .id(Integer.parseInt(table.asList().get(7)))
+                .body(postUpdates.get("body"))
+                .title(postUpdates.get("title"))
+                .userId(Integer.parseInt(postUpdates.get("userId")))
+                .id(Integer.parseInt(postUpdates.get("postId")))
                 .build();
 
         PostModel updatedPost = updatePostActions.updatePost(updatedPostModel);
@@ -43,7 +50,7 @@ public class UpdatePostStepDefinitions {
         switch (field) {
             case "body" -> requestParams.addProperty("body", "updated body");
             case "title" -> requestParams.addProperty("title", "updated title");
-            default -> System.out.printf("Oops! Wrong field type %s%n", field);
+            default -> System.out.printf("Oops! Wrong field type %s\n", field);
         }
         ;
 
@@ -75,7 +82,7 @@ public class UpdatePostStepDefinitions {
         switch (updatedField) {
             case "body" -> actualField = updatedPost.getBody();
             case "title" -> actualField = updatedPost.getTitle();
-            default -> System.out.printf("Oops! Wrong field type %s%n", updatedField);
+            default -> System.out.printf("Oops! Wrong field type %s\n", updatedField);
         }
         ;
 

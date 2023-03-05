@@ -17,7 +17,7 @@ public class GetPostActions extends BaseActions {
     public PostModel sendPostRequest(int id) {
         return given(initSpec())
                 .when()
-                .get(appConfig.postsUrl() + String.format("/%s", id))
+                .get(appConfig.postsUrl() + String.format("/%d", id))
                 .then()
                 .log().ifError()
                 .statusCode(200)

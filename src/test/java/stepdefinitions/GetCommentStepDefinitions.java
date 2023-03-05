@@ -55,7 +55,8 @@ public class GetCommentStepDefinitions {
 
     @When("User requests to see a comment with invalid {string}")
     public void user_requests_all_posts_with_invalid_userId(String commentId) {
-        context.setResponseCode(getCommentActions.sendUnsuccessfulRequest(appConfig.commentsUrl(), commentId));
+        int responseCode = getCommentActions.sendUnsuccessfulRequest(appConfig.commentsUrl(), commentId);
+        context.setResponseCode(responseCode);
     }
 
     @Then("User gets a valid response for requested comment")

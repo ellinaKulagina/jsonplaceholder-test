@@ -27,7 +27,7 @@ public class GetCommentActions extends BaseActions {
     public CommentModel sendCommentRequest(int id) {
         return given(initSpec())
                 .when()
-                .get(appConfig.commentsUrl() + String.format("/%s", id))
+                .get(appConfig.commentsUrl() + String.format("/%d", id))
                 .then()
                 .log().ifError()
                 .statusCode(200)

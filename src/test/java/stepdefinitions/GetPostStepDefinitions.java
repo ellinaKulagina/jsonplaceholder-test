@@ -12,6 +12,7 @@ import utils.Context;
 
 import java.util.List;
 
+import static helpers.StringHelper.urlEncode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.StringConstants.POSTBODY;
 import static utils.StringConstants.POSTTITLE;
@@ -34,21 +35,28 @@ public class GetPostStepDefinitions {
         context.setPosts(posts);
     }
 
-    @When("User requests to see a post with invalid {string}")
-    public void user_requests_post_with_invalid_id(String id) {
-        context.setResponseCode(getPostActions.sendUnsuccessfulRequest(appConfig.postsUrl(), id));
+    @When("User requests to see the post with id {int}")
+    public void user_requests_post_with_id(int id) {
+        PostModel post = getPostActions.sendPostRequest(id);
+        context.setActualPost(post);
     }
 
-    @When("User requests to see all posts for a user {int}")
+    @When("User requests to see the post with invalid id {string}")
+    public void user_requests_post_with_invalid_id(String id) {
+        int statusCode = getPostActions.sendUnsuccessfulRequest(appConfig.postsUrl(), id);
+        context.setResponseCode(statusCode);
+    }
+
+    @When("User requests to see all posts for user {int}")
     public void user_requests_all_posts_with_userId(int userId) {
-        List<PostModel> posts = getPostActions.sendPostsRequest(String.format("?userId=%s", userId));
+        List<PostModel> posts = getPostActions.sendPostsRequest(String.format("?userId=%d", userId));
         context.setPosts(posts);
         context.setUserId(userId);
     }
 
     @When("User requests to see all posts for a user with invalid {string}")
     public void user_requests_all_posts_with_invalid_userId(String userId) {
-        List<PostModel> posts = getPostActions.sendPostsRequest(String.format("?userId=%s", userId));
+        List<PostModel> posts = getPostActions.sendPostsRequest(String.format("?userId=%s", urlEncode(userId)));
         context.setPosts(posts);
     }
 
