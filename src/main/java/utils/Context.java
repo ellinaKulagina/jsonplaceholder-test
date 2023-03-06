@@ -22,6 +22,7 @@ public class Context {
     private UserModel actualUser;
     private int responseCode;
     private int userId;
+    private int postId;
     private String partialUpdate;
 
     public Context() {

@@ -4,18 +4,13 @@ import actions.post.GetPostActions;
 import helpers.StringHelper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import models.PostModel;
 import org.assertj.core.api.SoftAssertions;
 import utils.ApplicationConfiguration;
 import utils.ApplicationConfigurationLoader;
 import utils.Context;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static helpers.StringHelper.urlEncode;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,10 +19,9 @@ import static utils.StringConstants.POSTTITLE;
 
 public class GetPostStepDefinitions {
 
+    protected static ApplicationConfiguration appConfig = ApplicationConfigurationLoader.getConfig();
     private Context context;
     private GetPostActions getPostActions = new GetPostActions();
-
-    protected static ApplicationConfiguration appConfig = ApplicationConfigurationLoader.getConfig();
 
 
     public GetPostStepDefinitions(Context context) {
@@ -93,9 +87,7 @@ public class GetPostStepDefinitions {
         List<PostModel> posts = context.getPosts();
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(posts).isNotEmpty();
-        softly.assertThat(posts).allSatisfy(postModel -> {
-            assertThat(postModel.getUserId()).isEqualTo(context.getUserId());
-        });
+        softly.assertThat(posts).allSatisfy(postModel -> assertThat(postModel.getUserId()).isEqualTo(context.getUserId()));
         softly.assertAll();
     }
 
@@ -103,4 +95,5 @@ public class GetPostStepDefinitions {
     public void user_gets_emptyResponse() {
         assertThat(context.getPosts()).size().isEqualTo(0);
     }
+
 }

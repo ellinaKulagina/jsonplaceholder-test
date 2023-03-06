@@ -31,6 +31,25 @@ public class GetCommentStepDefinitions {
         context.setComments(comments);
     }
 
+    @When("User requests to see all comments for a post with id {int}")
+    public void userRequestsToSeeAllCommentsForAPostWithId(int postId) {
+        List<CommentModel> comments = getCommentActions.getCommentsForPostRequest(postId);
+        context.setComments(comments);
+    }
+
+    @When("User requests to see a comment with id {int}")
+    public void user_requests_to_see_a_comment_with_id(int postId) {
+        CommentModel actualComment = getCommentActions.sendCommentRequest(postId);
+        context.setActualComment(actualComment);
+        context.setPostId(postId);
+    }
+
+    @When("User requests to see a comment with invalid {string}")
+    public void user_requests_all_posts_with_invalid_userId(String commentId) {
+        int responseCode = getCommentActions.sendUnsuccessfulRequest(appConfig.commentsUrl(), commentId);
+        context.setResponseCode(responseCode);
+    }
+
     @Then("User gets a list of all comments")
     public void user_gets_all_comments() {
         List<CommentModel> comments = context.getComments();
@@ -47,18 +66,6 @@ public class GetCommentStepDefinitions {
         softly.assertAll();
     }
 
-    @When("User requests to see a comment with id {int}")
-    public void user_requests_to_see_a_comment_with_id(Integer id) {
-        CommentModel actualComment = getCommentActions.sendCommentRequest(id);
-        context.setActualComment(actualComment);
-    }
-
-    @When("User requests to see a comment with invalid {string}")
-    public void user_requests_all_posts_with_invalid_userId(String commentId) {
-        int responseCode = getCommentActions.sendUnsuccessfulRequest(appConfig.commentsUrl(), commentId);
-        context.setResponseCode(responseCode);
-    }
-
     @Then("User gets a valid response for requested comment")
     public void user_gets_valid_response_for_comment() {
         CommentModel expectedComment = CommentModel.builder()
@@ -71,5 +78,17 @@ public class GetCommentStepDefinitions {
         CommentModel actualComment = context.getActualComment();
         actualComment.setBody(StringHelper.removeNewLinesFromBody(actualComment.getBody()));
         assertThat(actualComment).isEqualTo(expectedComment);
+    }
+
+    @Then("User gets a valid response with all comments")
+    public void userGetsAValidResponseWithAllComments() {
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(context.getComments()).allSatisfy(commentModel -> {
+            assertThat(commentModel.getPostId()).isEqualTo(context.getPostId());
+            assertThat(commentModel.getId()).isPositive();
+            assertThat(commentModel.getBody()).isNotEmpty();
+            assertThat(commentModel.getName()).isNotEmpty();
+            assertThat(commentModel.getEmail()).isNotEmpty();
+        });
     }
 }

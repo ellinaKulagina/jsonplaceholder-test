@@ -24,6 +24,16 @@ public class GetCommentActions extends BaseActions {
                 .extract().as(CommentModel[].class)).collect(Collectors.toList());
     }
 
+    public List<CommentModel> getCommentsForPostRequest(Integer postId) {
+        return Arrays.stream(given(initSpec())
+                .when()
+                .get(String.format(appConfig.commentPostUrl(), postId))
+                .then()
+                .log().ifError()
+                .statusCode(200)
+                .extract().as(CommentModel[].class)).collect(Collectors.toList());
+    }
+
     public CommentModel sendCommentRequest(int id) {
         return given(initSpec())
                 .when()
