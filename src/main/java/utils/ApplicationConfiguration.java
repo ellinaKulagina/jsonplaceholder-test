@@ -12,6 +12,10 @@ public interface ApplicationConfiguration extends Config {
   @DefaultValue("${base.url}/posts")
   String postsUrl();
 
+  @Key("user.post.url")
+  @DefaultValue("${posts.url}?userId=")
+  String userPostUrl();
+
   @Key("comments.url")
   @DefaultValue("${base.url}/comments")
   String commentsUrl();

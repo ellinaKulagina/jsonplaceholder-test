@@ -8,12 +8,12 @@ Feature: Test GET method for getting one or multiple posts
 
   @severity=blocker
   Scenario: User requests existing post
-    When User requests to see the post with id 1
+    When User requests to see a post with id 1
     Then User gets a valid response for requested post
 
   @severity=medium
   Scenario: User requests all posts for a specific user
-    When User requests to see all posts for user 1
+    When User requests to see all posts for user "1"
     Then User gets a list of posts for the specified user
 
   @severity=minor

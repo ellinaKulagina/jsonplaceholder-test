@@ -1,6 +1,7 @@
 package actions.post;
 
 import actions.BaseActions;
+import io.restassured.response.Response;
 import models.PostModel;
 import utils.ApplicationConfiguration;
 import utils.ApplicationConfigurationLoader;
@@ -14,23 +15,23 @@ import static io.restassured.RestAssured.given;
 public class GetPostActions extends BaseActions {
     protected static ApplicationConfiguration appConfig = ApplicationConfigurationLoader.getConfig();
 
-    public PostModel sendPostRequest(int id) {
-        return given(initSpec())
-                .when()
-                .get(appConfig.postsUrl() + String.format("/%d", id))
-                .then()
-                .log().ifError()
-                .statusCode(200)
-                .extract().as(PostModel.class);
+    public List<PostModel> getListOfPosts(String url, String path) {
+        Response response = sendGetRequest(url, path);
+        return Arrays.stream(response.as(PostModel[].class)).collect(Collectors.toList());
     }
 
-    public List<PostModel> sendPostsRequest(String urlPath) {
-        return Arrays.stream(given(initSpec())
+    public PostModel getPost(String url, String path) {
+        Response response = sendGetRequest(url, path);
+        return response.as(PostModel.class);
+    }
+
+    private Response sendGetRequest(String url, String path) {
+        return given(initSpec())
                 .when()
-                .get(appConfig.postsUrl() + urlPath)
+                .get(url + path)
                 .then()
                 .log().ifError()
                 .statusCode(200)
-                .extract().as(PostModel[].class)).collect(Collectors.toList());
+                .extract().response();
     }
 }

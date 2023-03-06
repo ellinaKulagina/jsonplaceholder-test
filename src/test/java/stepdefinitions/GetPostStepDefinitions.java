@@ -4,13 +4,18 @@ import actions.post.GetPostActions;
 import helpers.StringHelper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.response.Response;
 import models.PostModel;
 import org.assertj.core.api.SoftAssertions;
 import utils.ApplicationConfiguration;
 import utils.ApplicationConfigurationLoader;
 import utils.Context;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static helpers.StringHelper.urlEncode;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,14 +36,8 @@ public class GetPostStepDefinitions {
 
     @When("User requests to see all posts")
     public void user_requests_all_posts() {
-        List<PostModel> posts = getPostActions.sendPostsRequest("");
+        List<PostModel> posts = getPostActions.getListOfPosts(appConfig.postsUrl(), "");
         context.setPosts(posts);
-    }
-
-    @When("User requests to see the post with id {int}")
-    public void user_requests_post_with_id(int id) {
-        PostModel post = getPostActions.sendPostRequest(id);
-        context.setActualPost(post);
     }
 
     @When("User requests to see the post with invalid id {string}")
@@ -47,16 +46,16 @@ public class GetPostStepDefinitions {
         context.setResponseCode(statusCode);
     }
 
-    @When("User requests to see all posts for user {int}")
-    public void user_requests_all_posts_with_userId(int userId) {
-        List<PostModel> posts = getPostActions.sendPostsRequest(String.format("?userId=%d", userId));
+    @When("User requests to see all posts for user {string}")
+    public void user_requests_all_posts_with_userId(String userId) {
+        List<PostModel> posts = getPostActions.getListOfPosts(appConfig.userPostUrl(), userId);
         context.setPosts(posts);
-        context.setUserId(userId);
+        context.setUserId(Integer.parseInt(userId));
     }
 
     @When("User requests to see all posts for a user with invalid {string}")
     public void user_requests_all_posts_with_invalid_userId(String userId) {
-        List<PostModel> posts = getPostActions.sendPostsRequest(String.format("?userId=%s", urlEncode(userId)));
+        List<PostModel> posts = getPostActions.getListOfPosts(appConfig.userPostUrl(), urlEncode(userId));
         context.setPosts(posts);
     }
 
