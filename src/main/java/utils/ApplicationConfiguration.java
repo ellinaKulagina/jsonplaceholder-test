@@ -19,4 +19,8 @@ public interface ApplicationConfiguration extends Config {
   @Key("comments.url")
   @DefaultValue("${base.url}/comments")
   String commentsUrl();
+
+  @Key("users.url")
+  @DefaultValue("${base.url}/users")
+  String usersUrl();
 }
