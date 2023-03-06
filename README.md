@@ -2,7 +2,12 @@
 
 ## :dart: About ##
 This simple test framework is created to test REST API from https://jsonplaceholder.typicode.com/
+
 Tests cover all main functionalities from the [guide page](https://jsonplaceholder.typicode.com/guide/)
+
+There 2 tests that fail on purpose
+<img width="1181" alt="image" src="https://user-images.githubusercontent.com/30526737/223173450-6c30e073-152e-4fc7-bab3-1f48214c7d8c.png">
+
 
 
 ## :rocket: Technologies ##
